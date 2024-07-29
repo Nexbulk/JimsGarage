@@ -7,7 +7,7 @@ services:
     # See https://github.com/qdm12/gluetun-wiki/blob/main/setup/connect-a-container-to-gluetun.md#external-container-to-gluetun
     cap_add:
       - NET_ADMIN
-    devices:
+    devices: 
       - /dev/net/tun:/dev/net/tun
     ports:
       - 6881:6881
@@ -17,19 +17,19 @@ services:
       - 8989:8989 # Sonarr
       - 9696:9696 # Prowlarr
     volumes:
-      - /home/ubuntu/docker/arr-stack:/gluetun
+      - /volume1/docker/gluetun
     environment:
       # See https://github.com/qdm12/gluetun-wiki/tree/main/setup#setup
       - VPN_SERVICE_PROVIDER=nordvpn
       - VPN_TYPE=wireguard
       # OpenVPN:
-      # - OPENVPN_USER=
-      # - OPENVPN_PASSWORD=
+      # - OPENVPN_USER=amjad_ghazal@hotmail.com
+      # - OPENVPN_PASSWORD=IpadMobile1@
       # Wireguard:
       - WIREGUARD_PRIVATE_KEY=<YOUR_PRIVATE_KEY> # See https://github.com/qdm12/gluetun-wiki/blob/main/setup/providers/nordvpn.md#obtain-your-wireguard-private-key
       - WIREGUARD_ADDRESSES=10.5.0.2/32
       # Timezone for accurate log times
-      - TZ=Europe/London
+      - TZ=Europe/Berlin
       # Server list updater
       # See https://github.com/qdm12/gluetun-wiki/blob/main/setup/servers.md#update-the-vpn-servers-list
       - UPDATER_PERIOD=24h
@@ -39,13 +39,13 @@ services:
     container_name: qbittorrent
     network_mode: "service:gluetun"
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/London
+      - PUID=1002
+      - PGID=10
+      - TZ=Europe/Berlin
       - WEBUI_PORT=8085
     volumes:
-      - /home/ubuntu/docker/arr-stack/qbittorrent:/config
-      - /home/ubuntu/docker/arr-stack/qbittorrent/downloads:/downloads
+      - /volume1/docker/qbittorrent:/config
+      - /volume1/docker/qbittorrent:/downloads
     depends_on:
       - gluetun
     restart: always
@@ -55,14 +55,14 @@ services:
     container_name: jackett
     network_mode: "service:gluetun"
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=1002
+      - PGID=10
       - TZ=Etc/UTC
       - AUTO_UPDATE=true #optional
       - RUN_OPTS= #optional
     volumes:
-      - /home/ubuntu/docker/arr-stack/jackett/data:/config
-      - /home/ubuntu/docker/arr-stack/jackett/blackhole:/downloads
+      - /volume1/docker/jackett:/config
+      - /volume1/docker/jackett/:/downloads
     restart: unless-stopped
 
   sonarr:
@@ -70,11 +70,11 @@ services:
     container_name: sonarr
     network_mode: "service:gluetun"
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Etc/UTC
+      - PUID=1002
+      - PGID=10
+      - TZ=Europe/Berlin
     volumes:
-      - /home/ubuntu/docker/arr-stack/sonarr/data:/config
+      - /volume1/docker/sonarr:/config
       - /home/ubuntu/docker/arr-stack/sonarr/tvseries:/tv #optional
       - /home/ubuntu/docker/arr-stack/sonarr/downloadclient-downloads:/downloads #optional
     restart: unless-stopped
@@ -84,9 +84,9 @@ services:
     container_name: prowlarr
     network_mode: "service:gluetun"
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Etc/UTC
+      - PUID=1002
+      - PGID=10
+      - TZ=Europe/Berlin
     volumes:
-      - /home/ubuntu/docker/arr-stack/prowlarr/data:/config
+      - /volume1/docker/prowlarr:/config
     restart: unless-stopped
